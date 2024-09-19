@@ -14,7 +14,7 @@ const defaultValue: { user: IAuthStore} = {
   }
 }
 
-export const authStore = defineStore('auth', {
+export const useAuthStore = defineStore('auth', {
   state: () => defaultValue,
   getters: {
     isAuth: state => state.user.status
@@ -28,3 +28,16 @@ export const authStore = defineStore('auth', {
     }
   },
 })
+
+
+export const useIsLoadingStore = defineStore('isLoading', {
+  state: () => ({
+    isLoading: true,
+  }),
+  actions: {
+    set(data: boolean) {
+      this.$patch({ isLoading: data })
+    },
+  },
+})
+
