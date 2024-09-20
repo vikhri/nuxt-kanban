@@ -1,4 +1,4 @@
-import type { EnumStatus } from '~/types/deals.types'
+import type { EnumStatus } from '~/types/deals.types.ts'
 
 export interface ICard {
   id: string
