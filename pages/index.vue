@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import type {ICard, IColumn} from '~/components/kanban/kanban.types.ts'
 import { useKanbanQuery } from '~/components/kanban/useKanbanQuery';
+import { useMutation } from '@tanstack/vue-query'
+import { COLLECTION_DEALS, DB_ID, COLLECTION_CUSTOMERS } from '~/app.constants';
 import {convertCurrency} from "../utils/convertCurrency";
 import dayjs from "dayjs";
 
@@ -13,6 +15,38 @@ const sourceColumnRef = ref<IColumn | null>(null);
 
 const { data, isLoading, error, refetch } = useKanbanQuery();
 
+type TypeMutationVariables = {
+  docId: string,
+  status?: EnumStatus
+}
+
+const { mutate } = useMutation({
+  mutationKey: ['move card'],
+  mutationFn: ({ docId, status }: TypeMutationVariables) =>
+    DB.updateDocument(DB_ID, COLLECTION_DEALS, docId, {
+      status,
+    }),
+  onSuccess: () => {
+    refetch()
+  },
+})
+
+function handleDragStart(card: ICard, column: IColumn) {
+  dragCardRef.value = card
+  sourceColumnRef.value = column
+}
+
+function handleDragOver(event: DragEvent) {
+  event.preventDefault();
+}
+
+function handleDrop(targetColumn: IColumn) {
+  if (dragCardRef.value && sourceColumnRef.value) {
+    mutate({ docId: dragCardRef.value.id, status: targetColumn.id })
+  }
+}
+
+
 </script>
 
 <template>
@@ -24,18 +58,23 @@ const { data, isLoading, error, refetch } = useKanbanQuery();
       <div
         v-for="(column, index) in data"
         :key="column.id"
+        @dragover="handleDragOver"
+        @drop="() => handleDrop(column)"
       >
         <div
           class="rounded bg-slate-700 py-1 px-5 mb-2 text-center"
         >
           {{ column.name }}
+          <span>{{column.id }}</span>
         </div>
+        <KanbanCreateDeal :refetch="refetch" :status="column.id" />
         <div>
           <UiCard
             v-for="card in column.items"
             :key="card.id"
             class="mb-5"
             draggable="true"
+            @dragstart="handleDragStart(card, column)"
           >
             <UiCardHeader role="button" >
               <UiCardTitle>{{ card.name }}</UiCardTitle>
@@ -54,7 +93,7 @@ const { data, isLoading, error, refetch } = useKanbanQuery();
         </div>
       </div>
     </div>
-    <KanbanSlideover />
+<!--    <KanbanSlideover />-->
   </div>
 </div>
 </template>

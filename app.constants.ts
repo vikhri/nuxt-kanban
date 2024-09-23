@@ -1,6 +1,6 @@
 export const APP_WRITE_ID = '66ea992e000c237d382a'
 export const DB_ID = 'crm-base'
-export const COLLECTION_DEALS = '66ea9c460021cf63e939'
+export const COLLECTION_DEALS = '66f15ce90021fb39d70b'
 export const COLLECTION_CUSTOMERS = '66ea9e1800295c19c624'
 export const COLLECTION_COMMENTS = '66ea9d1c00012231e1df'
 export const STORAGE_ID = 'storage'

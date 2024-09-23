@@ -14,14 +14,12 @@ export default defineNuxtConfig({
       }
     }],
     '@nuxt/icon',
-    '@pinia/nuxt'
+    '@pinia/nuxt',
+    [
+      '@vee-validate/nuxt',
+      {
+        autoImports: true,
+      },
+    ],
   ],
-  // shadcn: {
-  //   prefix: '',
-  //   componentDir: './components/ui'
-  // },
-  // pinia: {
-  //   autoImports: ['defineStore'],
-  //   storesDirs:['./stores/**']
-  // }
 })

@@ -22,6 +22,7 @@ export function useKanbanQuery() {
 
       for (const deal of deals) {
          const column = newBoard.find(col => col.id === deal.status)
+
          if(column) {
            column.items.push({
              $createdAt: deal.$createdAt,
@@ -29,7 +30,7 @@ export function useKanbanQuery() {
              name: deal.name,
              price: deal.price,
              companyName: deal.customers?.name,
-             status: column?.name
+             status: column.id
            })
          }
         }
